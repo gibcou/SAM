@@ -6,6 +6,7 @@ const app = express();
 const port = 3001;
 
 app.use(cors());
+app.use(express.json());
 
 // MongoDB Connection
 mongoose.connect('mongodb+srv://Gibson:Sm00thF0x!97@sam.yzl2zle.mongodb.net/?appName=SAM')
@@ -21,6 +22,16 @@ const ServiceSchema = new mongoose.Schema({
 
 const Service = mongoose.model('Service', ServiceSchema);
 
+// Booking Schema
+const BookingSchema = new mongoose.Schema({
+  service: { type: mongoose.Schema.Types.ObjectId, ref: 'Service' },
+  date: Date,
+  name: String,
+  email: String
+});
+
+const Booking = mongoose.model('Booking', BookingSchema);
+
 app.get('/', (req, res) => {
   res.send('Hello from the Shines Autos Meticulously backend!');
 });
@@ -35,6 +46,18 @@ app.get('/api/services', async (req, res) => {
   }
 });
 
+// API endpoint to create a new booking
+app.post('/api/bookings', async (req, res) => {
+  try {
+    const newBooking = new Booking(req.body);
+    await newBooking.save();
+    res.status(201).json(newBooking);
+  } catch (err) {
+    res.status(500).send('Server Error');
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
