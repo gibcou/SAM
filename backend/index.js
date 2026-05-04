@@ -1,11 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const app = express();
 const port = 3001;
 
+app.use(cors());
+
 // MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/shines-autos')
+mongoose.connect('mongodb+srv://Gibson:Sm00thF0x!97@sam.yzl2zle.mongodb.net/?appName=SAM')
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log(err));
 
